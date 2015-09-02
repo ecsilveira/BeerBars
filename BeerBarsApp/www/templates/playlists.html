@@ -1,0 +1,19 @@
+<ion-view view-title="Playlists">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="estabelecimento in estabelecimentos" class="card">
+        	<a href="#/app/playlists/{{estabelecimento.id}}">
+        	<div class="item item-avatar">
+			    <img src="img/copo-cerveja.jpg">
+			    <h2>{{estabelecimento.nomeDoEstabelecimento}}</h2>
+			    <p>{{estabelecimento.endereco}}</p>
+		    </div>
+          </a>
+          <div align="right">
+		  <a class="button ion-heart button-clear button-dark"></a>
+		  <a class="button ion-more button-clear button-dark"></a>
+		  </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
