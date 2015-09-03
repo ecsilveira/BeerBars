@@ -1,6 +1,7 @@
 $app.config(['$translateProvider', function($translateProvider) {
 	$translateProvider.translations('en', {
 		'LABEL.GENERAL.APPTITLE'  : 'BeerBars App',
+		'LABEL.GENERAL.MENUTITLE' : 'Menu',
 		'LABEL.GENERAL.CLOSE'  : 'Close',
 		'LABEL.LOGIN.TITLE'    : 'Login',
 		'LABEL.LOGIN.USERNAME' : 'Username',
@@ -9,6 +10,7 @@ $app.config(['$translateProvider', function($translateProvider) {
 	})
 	.translations('pt', {
 		'LABEL.GENERAL.APPTITLE'  : 'BeerBars App',
+		'LABEL.GENERAL.MENUTITLE' : 'Menu',
 		'LABEL.GENERAL.CLOSE'  : 'Fechar',
 		'LABEL.LOGIN.TITLE'    : 'Login',
 		'LABEL.LOGIN.USERNAME' : 'Usu\u00E1rio',
@@ -18,4 +20,4 @@ $app.config(['$translateProvider', function($translateProvider) {
 
 	$translateProvider.preferredLanguage('pt'); //temos que dizer qual é a default.
 	$translateProvider.useSanitizeValueStrategy('escaped');
-} ]);
+}]);

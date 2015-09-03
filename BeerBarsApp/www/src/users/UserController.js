@@ -47,6 +47,25 @@
         $mdSidenav('left').toggle();
       });
     }
+    
+    // Perform the login action when the user submits the login form
+    function doLogin() {
+  	$scope.loading = true;
+  	BaasBox.setEndPoint("http://beerbarsapp.com:9000");
+  	BaasBox.appcode = "1234567890";
+      
+      BaasBox.login($scope.loginData.username, $scope.loginData.password)
+  	.done(function (user) {
+  		$scope.user = user;
+  		
+  		console.log("Logged in ", user);
+  		$scope.closeLogin();
+  	})
+  	.fail(function (err) {
+  		console.log("error ", err);
+  	});
+      
+      $scope.loading = false;
 
     /**
      * Select the current avatars
@@ -93,4 +112,4 @@
 
   }
 
-})();
+}})();
