@@ -1,0 +1,24 @@
+<md-content>
+	<md-list>
+    	<md-subheader class="md-no-sticky">Bares Proximos</md-subheader>
+      		<md-list-item ng-repeat="bar in baresctrl.bares" >
+				<md-card>
+      			<img ng-src="{{bar.imagemCapa}}" class="md-card-image" alt="{{bar.nomeBar}}">
+				      <md-card-content>
+				        <h1>{{bar.nomeBar}}</h1>
+				        <h2>{{bar.endereco}}</h2>
+				        <h3>{{bar.bairro}}</h3>
+				        <h3>{{bar.telefone}}</h3>
+				      </md-card-content>
+      				<div class="md-actions" layout="row" layout-align="end right">
+				      	<md-icon>star_rate</md-icon>{{bar.mediaAvalicao | number}}
+				      
+				        <md-button>
+				        	{{::'LABEL.BARES.CARDAPIO' | translate}}<md-icon>chevron_right</md-icon>
+				        </md-button>
+				      </div>
+    			</md-card>
+    		</md-list-item>
+    </md-list>
+
+</md-content>

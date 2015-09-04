@@ -1,4 +1,4 @@
- var $app = angular.module('starter', ['ngMaterial','ngRoute','pascalprecht.translate']) 
+ angular.module('starter', ['ngMaterial','pascalprecht.translate', 'controllers.navigation', 'ui.router', 'bares']) 
  
  .config(function($mdThemingProvider, $mdIconProvider){
 	  $mdIconProvider.defaultIconSet("./assets/svg/avatars.svg", 128)
@@ -10,7 +10,36 @@
 	  .icon("phone"      , "./assets/svg/phone.svg"       , 512);
 	  
 	  $mdThemingProvider.theme('default').primaryPalette('blue').accentPalette('red');
-  });
+  })
+  
+.config(function($stateProvider, $urlRouterProvider) {
+    
+    $stateProvider
+        
+        // HOME STATES AND NESTED VIEWS ========================================
+        .state('home', {
+            url: '/',
+            templateUrl: 'app/bares.html'
+        })
+        .state('login', {
+            url: '/login',
+            templateUrl: 'app/login.html',
+        })
+        .state('bares', {
+            url: '/bares',
+            templateUrl: 'app/bares.html',
+            controller: 'BaresController',
+            controllerAs: 'baresctrl'
+        })
+        
+        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
+        .state('about', {
+            // we'll get to this in a bit
+        });
+    
+    $urlRouterProvider.otherwise('/home');
+  }
+);
               
 //  .config(function($stateProvider, $urlRouterProvider) {
 //	  $stateProvider

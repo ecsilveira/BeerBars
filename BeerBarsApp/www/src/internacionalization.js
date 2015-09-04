@@ -1,4 +1,4 @@
-$app.config(['$translateProvider', function($translateProvider) {
+angular.module('starter').config(['$translateProvider', function($translateProvider) {
 	$translateProvider.translations('en', {
 		'LABEL.GENERAL.APPTITLE'  : 'BeerBars App',
 		'LABEL.GENERAL.MENUTITLE' : 'Menu',
@@ -15,7 +15,8 @@ $app.config(['$translateProvider', function($translateProvider) {
 		'LABEL.LOGIN.TITLE'    : 'Login',
 		'LABEL.LOGIN.USERNAME' : 'Usu\u00E1rio',
 		'LABEL.LOGIN.PASSWORD' : 'Senha',
-		'LABEL.LOGIN.LOGIN'    : 'Entrar'
+		'LABEL.LOGIN.LOGIN'    : 'Entrar',
+		'LABEL.BARES.CARDAPIO' : 'Card\u00E1pio'
 	});
 
 	$translateProvider.preferredLanguage('pt'); //temos que dizer qual é a default.

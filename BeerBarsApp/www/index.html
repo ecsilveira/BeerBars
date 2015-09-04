@@ -15,7 +15,7 @@
 
  	<!-- Angular Material Dependencies -->
     <script src="lib/angular-js/angular.min.js"></script>
-    <script src="lib/angular-js/angular-route.min.js"></script>
+    <script src="lib/angular-js/angular-ui-route.min.js"></script>
     <script src="lib/angular-js/angular-animate.min.js"></script>
     <script src="lib/angular-js/angular-aria.min.js"></script>
     
@@ -28,6 +28,7 @@
     <!-- App Javascript -->
     <script src="src/starter.js"></script>
     <script src="src/navigationcontroller.js"></script>
+    <script src="src/bares/barescontroller.js"></script>
 <!--     <script src="src/users/Users.js"></script> -->
 <!--     <script src="src/users/UserController.js"></script> -->
 <!--     <script src="src/users/UserService.js"></script> -->
@@ -51,9 +52,16 @@
 
     <md-list>
       <md-list-item >
-          <md-button href="#/app/login" >
-            <md-icon>send</md-icon>
+          <md-button ui-sref="login" >
+            <md-icon>person</md-icon>
             Login
+          </md-button>
+          
+      </md-list-item>
+      <md-list-item>
+      	<md-button ui-sref="bares" >
+            <md-icon>local_bar</md-icon>
+            Bares
           </md-button>
       </md-list-item>
     </md-list>
@@ -63,24 +71,22 @@
   <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
 
     <md-toolbar layout="row" 
-    			class="md-whiteframe-z1" 
-            	ng-include="'app/components/navbar.html'">
+    			class="md-whiteframe-z1">
     <!-- ng-controller="NavigationController as navctrl" -->
     
       <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
-        <md-icon md-svg-icon="menu" ></md-icon>
+        <md-icon md-svg-icon="menu"></md-icon>
       </md-button>
       <h1>{{::'LABEL.GENERAL.APPTITLE' | translate}}</h1>
     </md-toolbar>
 
 	<md-content ui-view
 	            md-scroll-y
-	            class="md-default-theme"
-	            role="main"
-	            flex>
+	            role="main">
 	</md-content>
 
-<!--     <md-content flex id="content"> -->
+<!--     <md-content flex id="content"> -
+->
 <!--         <md-icon md-svg-icon="{{ul.selected.avatar}}" class="avatar"></md-icon> -->
 <!--         <h2>{{ul.selected.name}}</h2> -->
 <!--         <p>{{ul.selected.content}}</p> -->
