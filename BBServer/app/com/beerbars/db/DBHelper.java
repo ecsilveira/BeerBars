@@ -1,8 +1,14 @@
 package com.beerbars.db;
 
 import com.beerbars.ServerConfiguration;
+import com.beerbars.db.hook.HookManager;
+import com.beerbars.exceptions.DBFreezeException;
 import com.beerbars.logging.ServerLogger;
+import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.orientechnologies.orient.core.db.OPartitionedDatabasePoolFactory;
+import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.exception.ODatabaseException;
 
 /**
  * 
@@ -10,38 +16,104 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
  *
  */
 public class DBHelper {
+    
+    private static volatile Boolean bdFreeze = false;
+    
+    
+    private static ThreadLocal<Integer> transactionCount = new ThreadLocal<Integer>() {
+        protected Integer initialValue() {
+            return 0;
+        };
+    };
+//    private static ThreadLocal<String> username = new ThreadLocal<String>() {
+//        protected String initialValue() {
+//            return "";
+//        };
+//    };
+//
+//    private static ThreadLocal<String> password = new ThreadLocal<String>() {
+//        protected String initialValue() {
+//            return "";
+//        };
+//    };
+    
+    /**
+     * Abre uma conexao com o banco de dados
+     * Normalmente utilizado no ConnectDBWrapper 
+     * @param username
+     * @param password
+     * @return ODatabaseDocument
+     * @throws DBFreezeException 
+     */
+    public static ODatabaseDocument openConnection(String username, String password) throws DBFreezeException{
+        return open(username, password);
+    }
 	
-	private static ODatabaseDocumentTx open(String username, String password){
-		ServerLogger.debug("abrindo conexao com banco de dados");
-		ODatabaseDocumentTx conn = new ODatabaseDocumentTx(ServerConfiguration.getDatabaseURL()).open(username, password);
-		return conn;
+	private static ODatabaseDocument open(String username, String password) throws DBFreezeException {
+		ServerLogger.debug("DBHelper.open - begin...");
+		
+		ODatabaseDocument db = null;
+		try{
+            if (bdFreeze) {
+               throw new DBFreezeException();
+            }
+            
+            ServerLogger.debug("DBHelper.open - abrindo conexao com banco de dados");
+            
+            OPartitionedDatabasePoolFactory dbPoolFactory = new OPartitionedDatabasePoolFactory();
+            db = dbPoolFactory.get(ServerConfiguration.getDatabaseURL(), username, password).acquire();
+    		
+            ServerLogger.debug("DBHelper.open - abriu conexao para usuario: " + username);
+    		//TODO isso é necessario?????
+            //DBHelper.username.set(username);
+    		//DBHelper.password.set(password);
+    		
+    		HookManager.registerAll(getConnection());
+    				
+    		ServerLogger.debug("DBHelper.open - return");
+		}catch (DBFreezeException dbfe){
+		    throw dbfe;
+		}catch (Exception e) {
+		    ServerLogger.error("DBHelper.open - erro ao abrir conexao com banco de dados\n" + e.getMessage()); 
+        }
+		
+		return db;
 	}
-	
-	
-//	private static ODatabaseDocumentTx open(String appcode, String username, String password)
-//			throws InvalidAppCodeException {
-//
-//		if (appcode == null || !appcode.equals(BBConfiguration.configuration.getString(BBConfiguration.APP_CODE)))
-//			throw new InvalidAppCodeException(
-//					"Authentication info not valid or not provided: " + appcode + " is an Invalid App Code");
-//		if (dbFreeze) {
-//
-//			throw new ShuttingDownDBException();
-//		}
-//		String databaseName = BBConfiguration.getDBDir();
-//		if (BaasBoxLogger.isDebugEnabled())
-//			BaasBoxLogger.debug("opening connection on db: " + databaseName + " for " + username);
-//
-//		ODatabaseDocumentPool odp = ODatabaseDocumentPool.global();
-//		ODatabaseDocumentTxPooled conn = new ODatabaseDocumentTxPooled(odp, "plocal:" + BBConfiguration.getDBDir(),
-//				username, password);
-//
-//		HooksManager.registerAll(getConnection());
-//		DbHelper.appcode.set(appcode);
-//		DbHelper.username.set(username);
-//		DbHelper.password.set(password);
-//
-//		return getConnection();
-//	}
+
+    private static ODatabaseDocument getConnection() {
+        ServerLogger.debug("DBHelper.getConnetion - begin...");
+        ODatabaseDocumentTx db = null;
+        try {
+            db = (ODatabaseDocumentTx) ODatabaseRecordThreadLocal.INSTANCE.get();
+            ServerLogger.info("DBHelper.getConnetion - dados da Conexao do Banco = ID: " + db + " " + ((Object) db).hashCode());
+        } catch (ODatabaseException e) {
+            ServerLogger.error("DBHelper.getConnetion - nao foi possivel obter a conexao na thread local", e);
+        }
+        
+        ServerLogger.debug("DBHelper.getConnetion - return");
+        return db;
+    }
+    
+    /**
+     * 
+     */
+    public static void requestTransaction() {
+        ServerLogger.debug("DBHelper.requestTransaction - begin...");
+        ServerLogger.debug("DBHelper.requestTransaction - contagem de transacoes -antes-: " + transactionCount.get());
+        
+        ODatabaseDocument db = getConnection();
+        if (!isInTransaction(db)) {
+            ServerLogger.debug("DBHelper.requestTransaction - comecou uma transacao");
+            db.begin();
+        }
+        transactionCount.set(transactionCount.get().intValue() + 1);
+        
+        ServerLogger.debug("DBHelper.requestTransaction - contagem de transacoes -depois-: " + transactionCount.get());
+    }
+    
+    private static boolean isInTransaction(ODatabaseDocument db) {
+        return db.getTransaction().isActive();
+    }
+
 
 }
