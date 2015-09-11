@@ -53,4 +53,20 @@ public class ServerConfiguration {
 	public static Integer getSessionTokenTimeout(){
 	    return configuration.getInt(ServerConfigurationEnum.SESSION_TOKENS_TIMEOUT.toString());
 	}
+	
+	/**
+     * Retorna a versao da API do Servidor
+     * @return
+     */
+    public static String getServerVersion(){
+        return configuration.getString(ServerConfigurationEnum.SERVER_VERSION.toString());
+    }
+    
+    /**
+     * Retorna a versao do Banco de Dados do Servidor
+     * @return
+     */
+    public static String getDatabaseVersion(){
+        return configuration.getString(ServerConfigurationEnum.DATABASE_VERSION.toString());
+    }
 }

@@ -21,7 +21,13 @@ public enum ServerConfigurationEnum {
     REDIS_TOKENPROVIDER_ENABLE("redis.tokenprovider.enable"),
     
     /** SESSION TOKENS TIMEOUT */
-    SESSION_TOKENS_TIMEOUT("session.token.timeout");
+    SESSION_TOKENS_TIMEOUT("session.token.timeout"),
+    
+    /** SERVER VERSION */
+    SERVER_VERSION("server.version"),
+    
+    /** DATABASE VERSION */
+    DATABASE_VERSION("odb.version");
 
 	private String value;
 	

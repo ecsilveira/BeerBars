@@ -25,6 +25,8 @@ public class DBHelper {
             return 0;
         };
     };
+    
+    
 //    private static ThreadLocal<String> username = new ThreadLocal<String>() {
 //        protected String initialValue() {
 //            return "";
@@ -36,7 +38,16 @@ public class DBHelper {
 //            return "";
 //        };
 //    };
-    
+
+    /**
+     * Seta o banco de dados para o estado de Freeze 
+     * Para ações de Backup, Import e outras Manutençoes
+     * @param bdFreeze
+     */
+    public static void setBdFreeze(Boolean bdFreeze) {
+        DBHelper.bdFreeze = bdFreeze;
+    }
+
     /**
      * Abre uma conexao com o banco de dados
      * Normalmente utilizado no ConnectDBWrapper 
