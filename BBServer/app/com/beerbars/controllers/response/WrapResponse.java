@@ -2,15 +2,11 @@ package com.beerbars.controllers.response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import play.core.j.JavaResultExtractor;
 import play.libs.F;
@@ -22,9 +18,6 @@ import play.mvc.Http.Response;
 import play.mvc.Results;
 import play.mvc.SimpleResult;
 
-import com.baasbox.BBConfiguration;
-import com.baasbox.controllers.CustomHttpCode;
-import com.baasbox.service.logging.BaasBoxLogger;
 import com.beerbars.ServerConfiguration;
 import com.beerbars.controllers.helper.WrapResponseHelper;
 import com.beerbars.logging.ServerLogger;
@@ -191,9 +184,10 @@ public class WrapResponse {
     }
 
     private void setServerTime(Response response) {
-        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("GMT"));
-        String httpDate = DateTimeFormatter.RFC_1123_DATE_TIME.format(date);
-        response.setHeader("Date", DateTime.now().toString());
+        //TODO Java 8 classes
+//        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("GMT"));
+//        String httpDate = DateTimeFormatter.RFC_1123_DATE_TIME.format(date);
+//        response.setHeader("Date", DateTime.now().toString());
     }
 
     private SimpleResult onOk(int statusCode, Context ctx, String stringBody) throws Exception {
@@ -298,67 +292,68 @@ public class WrapResponse {
      */
     public F.Promise<SimpleResult> wrapAsync(Context ctx, F.Promise<SimpleResult> simpleResult) throws Throwable {
        ServerLogger.debug("WrapResponse.wrapAsync - begin...");
+    return simpleResult;
              
-       return simpleResult.map((result)->{
-           
-           ctx.response().setHeader("Access-Control-Allow-Origin", "*");
-           ctx.response().setHeader("Access-Control-Allow-Headers", "X-Requested-With");
-           
-           //this is an hack because scala can't access to the http context, and we need this information for the access log
-           String username = (String) ctx.args.get("username");
-           if (username!=null){
-               ctx.response().setHeader("X-BB-USERNAME", username)
-           }
-               
-               final int statusCode = result.getWrappedSimpleResult().header().status();
-               ServerLogger.debug("WrapResponse.wrapAsync - Executed API: "  + ctx.request() + " , return code " + statusCode);
-               ServerLogger.debug("WrapResponse.wrapAsync -Result type:"+result.getWrappedResult().getClass().getName() + " Response Content-Type:" +ctx.response().getHeaders().get("Content-Type"));
-               
-               if (ctx.response().getHeaders().get("Content-Type")!=null && !ctx.response().getHeaders().get("Content-Type").contains("json")){
-                   ServerLogger.debug("WrapResponse.wrapAsync - The response is a file, no wrap will be applied");
-                   return result;
-               }
-
-               String transferEncoding = JavaResultExtractor.getHeaders(result).get(HttpConstants.Headers.TRANSFER_ENCODING);
-               if(transferEncoding!=null && transferEncoding.equals(HttpConstants.HttpProtocol.CHUNKED)){
-                   return result;
-               }
-               
-               byte[] body = JavaResultExtractor.getBody(result);  //here the promise will be resolved
-               String stringBody = new String(body, "UTF-8");
-               if (BaasBoxLogger.isTraceEnabled()) if (BaasBoxLogger.isTraceEnabled()) BaasBoxLogger.trace ("stringBody: " +stringBody);
-               if (statusCode>399){    //an error has occured
-                     switch (statusCode) {
-                       case 400:   result =onBadRequest(ctx,stringBody);
-                                   break;
-                       case 401:   result =onUnauthorized(ctx,stringBody);
-                                   break;
-                       case 403:   result =onForbidden(ctx,stringBody);
-                                   break;
-                       case 404:   result =onResourceNotFound(ctx,stringBody);
-                                   break;
-                       default: 
-                           HttpMessagesEnum customCode HttpMessagesEnum.getFromServerCode(statusCode);
-                           if (customCode!=null){
-                               result = onCustomCode(customCode,ctx,stringBody);       
-                           }else result =onDefaultError(statusCode,ctx,stringBody);
-                       break;
-                     }
-               }else{ //status is not an error
-                   result=onOk(statusCode,ctx,stringBody);
-               } //if (statusCode>399)
-               if (statusCode==204) result = Results.noContent();
-               try {
-                   ServerLogger.debug("WrapResponse.wrapAsync - result: \n" + result.toString() + "\n  --> Body:\n" + new String(JavaResultExtractor.getBody(result),"UTF-8"));
-               }catch (Throwable e){}
-
-           setServerTime(ctx.response());
-           
-           ctx.response().setHeader("Content-Length", Long.toString(JavaResultExtractor.getBody(result).length));
-           ctx.response().setContentType("application/json; charset=utf-8");
-           
-           ServerLogger.debug("WrapResponse.wrapAsyncMethod - end");
-           return result;
-       }); 
+//       return simpleResult.map((result)->{
+//           
+//           ctx.response().setHeader("Access-Control-Allow-Origin", "*");
+//           ctx.response().setHeader("Access-Control-Allow-Headers", "X-Requested-With");
+//           
+//           //this is an hack because scala can't access to the http context, and we need this information for the access log
+//           String username = (String) ctx.args.get("username");
+//           if (username!=null){
+//               ctx.response().setHeader("X-BB-USERNAME", username)
+//           }
+//               
+//               final int statusCode = result.getWrappedSimpleResult().header().status();
+//               ServerLogger.debug("WrapResponse.wrapAsync - Executed API: "  + ctx.request() + " , return code " + statusCode);
+//               ServerLogger.debug("WrapResponse.wrapAsync -Result type:"+result.getWrappedResult().getClass().getName() + " Response Content-Type:" +ctx.response().getHeaders().get("Content-Type"));
+//               
+//               if (ctx.response().getHeaders().get("Content-Type")!=null && !ctx.response().getHeaders().get("Content-Type").contains("json")){
+//                   ServerLogger.debug("WrapResponse.wrapAsync - The response is a file, no wrap will be applied");
+//                   return result;
+//               }
+//
+//               String transferEncoding = JavaResultExtractor.getHeaders(result).get(HttpConstants.Headers.TRANSFER_ENCODING);
+//               if(transferEncoding!=null && transferEncoding.equals(HttpConstants.HttpProtocol.CHUNKED)){
+//                   return result;
+//               }
+//               
+//               byte[] body = JavaResultExtractor.getBody(result);  //here the promise will be resolved
+//               String stringBody = new String(body, "UTF-8");
+//               if (BaasBoxLogger.isTraceEnabled()) if (BaasBoxLogger.isTraceEnabled()) BaasBoxLogger.trace ("stringBody: " +stringBody);
+//               if (statusCode>399){    //an error has occured
+//                     switch (statusCode) {
+//                       case 400:   result =onBadRequest(ctx,stringBody);
+//                                   break;
+//                       case 401:   result =onUnauthorized(ctx,stringBody);
+//                                   break;
+//                       case 403:   result =onForbidden(ctx,stringBody);
+//                                   break;
+//                       case 404:   result =onResourceNotFound(ctx,stringBody);
+//                                   break;
+//                       default: 
+//                           HttpMessagesEnum customCode HttpMessagesEnum.getFromServerCode(statusCode);
+//                           if (customCode!=null){
+//                               result = onCustomCode(customCode,ctx,stringBody);       
+//                           }else result =onDefaultError(statusCode,ctx,stringBody);
+//                       break;
+//                     }
+//               }else{ //status is not an error
+//                   result=onOk(statusCode,ctx,stringBody);
+//               } //if (statusCode>399)
+//               if (statusCode==204) result = Results.noContent();
+//               try {
+//                   ServerLogger.debug("WrapResponse.wrapAsync - result: \n" + result.toString() + "\n  --> Body:\n" + new String(JavaResultExtractor.getBody(result),"UTF-8"));
+//               }catch (Throwable e){}
+//
+//           setServerTime(ctx.response());
+//           
+//           ctx.response().setHeader("Content-Length", Long.toString(JavaResultExtractor.getBody(result).length));
+//           ctx.response().setContentType("application/json; charset=utf-8");
+//           
+//           ServerLogger.debug("WrapResponse.wrapAsyncMethod - end");
+//           return result;
+//       }); 
     }//wrapAsync
 }

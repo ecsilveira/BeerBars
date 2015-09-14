@@ -1,7 +1,5 @@
 package com.beerbars;
 
-import static play.Logger.debug;
-import static play.Logger.info;
 import play.Application;
 import play.GlobalSettings;
 
