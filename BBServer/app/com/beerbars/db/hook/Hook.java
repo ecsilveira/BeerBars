@@ -3,8 +3,8 @@ package com.beerbars.db.hook;
 import com.orientechnologies.orient.core.hook.ODocumentHookAbstract;
 
 /**
- * Hooks são como triggers de banco de dados.
- * Em Java, no OrientDB, são mais rápidas que no próprio banco
+ * Hooks sao como triggers de banco de dados.
+ * Em Java, no OrientDB, sao mais rapidas que no proprio banco
  * 
  * @author B35579
  *

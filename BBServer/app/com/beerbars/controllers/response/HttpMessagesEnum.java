@@ -33,7 +33,7 @@ public enum HttpMessagesEnum {
     }
 
     /**
-     * Retorna o Código da Mensagem do SERVIDOR
+     * Retorna o Codigo da Mensagem do SERVIDOR
      * 
      * @return
      */
@@ -42,7 +42,7 @@ public enum HttpMessagesEnum {
     }
 
     /**
-     * Retorna o Código da Mensagem HTTP
+     * Retorna o Cï¿½digo da Mensagem HTTP
      * 
      * @return
      */

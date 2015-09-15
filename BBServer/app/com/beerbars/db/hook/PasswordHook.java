@@ -3,7 +3,7 @@ package com.beerbars.db.hook;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
 /**
- * Hook para ocultar o "PASSWORD" quando se lê um documento do tipo OUser
+ * Hook para ocultar o "PASSWORD" quando se le um documento do tipo OUser
  * 
  * @author B35579
  * 

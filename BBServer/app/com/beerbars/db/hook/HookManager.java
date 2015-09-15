@@ -8,8 +8,6 @@ import org.apache.commons.collections.IteratorUtils;
 
 import play.Logger;
 
-import com.baasbox.db.hook.Audit;
-import com.baasbox.db.hook.HidePassword;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.hook.ORecordHook;
@@ -18,19 +16,19 @@ import com.orientechnologies.orient.core.hook.ORecordHook.HOOK_POSITION;
 /**
  * Classe responsavel por gerenciar as Hooks da conexao com o banco de dados
  *
- * @author B35579
+ * @author Chico
  *
  */
 public class HookManager {
 
     /**
-     * Registra todas as Hooks básicas para a conexões
+     * Registra todas as Hooks basicas para a conexoes
      * @param db
      */
     public static void registerAll(ODatabaseDocument db) {
         Logger.debug("HookManager.registerAll - begin...");
 
-        // checa se as hooks já estao registradas para essa conexao
+        // checa se as hooks jï¿½ estao registradas para essa conexao
         boolean bAlreadyRegistred = false;
 
         Map<ORecordHook, HOOK_POSITION> hooks = db.getHooks();
@@ -38,7 +36,7 @@ public class HookManager {
 
         while (it.hasNext()) {
             if (it.next() instanceof Hook) {
-                Logger.debug("Hooks já resgistradas para essa conexao. Setando bAlreadyRegistred = true ");
+                Logger.debug("Hooks ja resgistradas para essa conexao. Setando bAlreadyRegistred = true ");
                 bAlreadyRegistred = true;
                 break;
             }
@@ -46,10 +44,10 @@ public class HookManager {
         
         //nao estao registradas
         if (!bAlreadyRegistred) {
-            Logger.info("Registrando Hooks para a conexao");
-            db.registerHook(Audit.getIstance(), HOOK_POSITION.REGULAR);
-            db.registerHook(HidePassword.getIstance(), HOOK_POSITION.LAST);
-            Logger.info("Registro Efetuado com Sucesso!");
+            Logger.info("HookManager.registerAll - Registrando Hooks para a conexao");
+            //db.registerHook(Audit.getIstance(), HOOK_POSITION.REGULAR);
+            db.registerHook(new PasswordHook(), HOOK_POSITION.LAST);
+            Logger.info("HookManager.registerAll - Registro Efetuado com Sucesso!");
         }
         Logger.debug("HookManager.registerAll - Hooks da Conexao: " + db.getHooks());
 
@@ -58,7 +56,7 @@ public class HookManager {
     }
     
     /**
-     * Desregistra todas as Hooks da conexão
+     * Desregistra todas as Hooks da conexao
      * @param db
      */
     @SuppressWarnings("unchecked")

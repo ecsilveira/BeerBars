@@ -67,7 +67,7 @@ public class SessionTokenProvider implements SessionTokenProviderInterface{
     }
 
     @Override
-    public ImmutableMap<SessionKeysEnum, ? extends Object> setSession(String AppCode, String username, String password) {
+    public ImmutableMap<SessionKeysEnum, ? extends Object> setSession(String username, String password) {
         UUID token = UUID.randomUUID();
         ImmutableMap<SessionKeysEnum, ? extends Object> info = ImmutableMap
                 .of( SessionKeysEnum.TOKEN, token.toString(), SessionKeysEnum.USERNAME, username, SessionKeysEnum.PASSWORD, password,

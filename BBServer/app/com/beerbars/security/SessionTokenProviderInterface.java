@@ -14,12 +14,11 @@ public interface SessionTokenProviderInterface {
 
     /**
      * Cria uma nova sessao, para posterior uso
-     * @param AppCode
      * @param username
      * @param Password
      * @return
      */
-    public ImmutableMap<SessionKeysEnum, ? extends Object> setSession(String AppCode, String username, String Password);
+    public ImmutableMap<SessionKeysEnum, ? extends Object> setSession(String username, String Password);
 
     /**
      * Retorna as informacoes da sessao pelo token

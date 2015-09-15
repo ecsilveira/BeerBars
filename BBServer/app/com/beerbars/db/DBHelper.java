@@ -2,7 +2,7 @@ package com.beerbars.db;
 
 import com.beerbars.ServerConfiguration;
 import com.beerbars.db.hook.HookManager;
-import com.beerbars.exceptions.DBFreezeException;
+import com.beerbars.exception.DBFreezeException;
 import com.beerbars.logging.ServerLogger;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.OPartitionedDatabasePoolFactory;
@@ -38,7 +38,7 @@ public class DBHelper {
     // };
 
     /**
-     * Seta o banco de dados para o estado de Freeze Para ações de Backup, Import e outras Manutençoes
+     * Seta o banco de dados para o estado de Freeze Para acoes de Backup, Import e outras Manutencoes
      * 
      * @param bdFreeze
      */
@@ -73,7 +73,7 @@ public class DBHelper {
             db = dbPoolFactory.get(ServerConfiguration.getDatabaseURL(), username, password).acquire();
 
             ServerLogger.debug("DBHelper.open - abriu conexao para usuario: " + username);
-            // TODO isso é necessario?????
+            // TODO isso e necessario?????
             // DBHelper.username.set(username);
             // DBHelper.password.set(password);
 

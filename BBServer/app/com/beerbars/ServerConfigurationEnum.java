@@ -1,7 +1,7 @@
 package com.beerbars;
 
 /**
- * Propriedades do arquivo de configuração
+ * Propriedades do arquivo de configuracao
  * conf/application.conf
  * @author B35579
  *

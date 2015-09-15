@@ -1,6 +1,6 @@
 package com.beerbars.controllers.helper;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import play.mvc.Http.Context;
 

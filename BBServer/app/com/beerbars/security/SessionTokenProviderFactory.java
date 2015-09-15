@@ -34,8 +34,8 @@ public class SessionTokenProviderFactory {
             case DEFAULT_PROVIDER:
                 return SessionTokenProvider.getSessionTokenProvider();
             case REDIS_PROVIDER:
-                // TODO futuramente ver a necessidade de trocar para o REDIS - mais segurança???
-                throw new RuntimeException("SessionTokenProviderInterface.getSessionTokenProvider - Token Provider não implementado");
+                // TODO futuramente ver a necessidade de trocar para o REDIS - mais seguranca???
+                throw new RuntimeException("SessionTokenProviderInterface.getSessionTokenProvider - Token Provider nao implementado");
             default:
                 throw new RuntimeException("SessionTokenProviderInterface.getSessionTokenProvider - Default not Found");
         }

@@ -1,9 +1,9 @@
-package com.beerbars.exceptions;
+package com.beerbars.exception;
 
 /**
- * Exception quando o banco de dados está em estado de freeze.
- * Seja para importação, export, backup e outros.
- * Impede que conexôes sejam abertas e ele perca sua consistencia.
+ * Exception quando o banco de dados esta em estado de freeze.
+ * Seja para importacao, export, backup e outros.
+ * Impede que conexoes sejam abertas e ele perca sua consistencia.
  * 
  * @author B35579
  *

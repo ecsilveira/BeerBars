@@ -3,7 +3,7 @@ package com.beerbars.logging;
 import play.Logger;
 
 /**
- * Classe responsável pelos Logs do Server
+ * Classe responsavel pelos Logs do Server
  * @author B35579
   */
 public class ServerLogger{
