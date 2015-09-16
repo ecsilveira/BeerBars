@@ -16,7 +16,7 @@ public class DBFreezeException extends RuntimeException{
      *  Construtor Padrao.
      */
     public DBFreezeException(){
-        super("Banco de Dados no estado de FREEZE!");
+        super("Banco de Dados no estado de FREEZE.");
     }
 
 }

@@ -16,6 +16,9 @@ public enum ServerConfigurationEnum {
     
     /** DATABASE PASSWORD */
 	DATABASE_PASSWORD("odb.password"),
+	
+	/** DATABASE POOL CONECTION CAPACITY */
+    DATABASE_POOL_CAPACITY("odb.pool.capacity"),
     
 	/** REDIS TOKEN PROVIDER ENABLED */
     REDIS_TOKENPROVIDER_ENABLE("redis.tokenprovider.enable"),

@@ -39,6 +39,14 @@ public class ServerConfiguration {
 	}
 	
 	/**
+     * Retorna o Password do Banco de Dados
+     * @return
+     */
+    public static Integer getDatabasePoolCapacity(){
+        return configuration.getInt(ServerConfigurationEnum.DATABASE_POOL_CAPACITY.toString());
+    }
+	
+	/**
 	 * Retorna se o Token Provider usa REDIS (in memory database)
 	 * @return
 	 */

@@ -26,14 +26,14 @@ import play.mvc.Result;
  * @author B35579
  * 
  */
-public class Credentials extends Controller {
+public class Credential extends Controller {
 
-	/**
-	 * Metodo Responsavel pelo Login do Usuario
-	 * 
-	 * @return F.Promise<Result>
-	 */
-	// @With ({NoUserCredentialWrapFilterAsync.class})
+    /**
+     * Metodo Responsavel pelo Login do Usuario
+     * 
+     * @return F.Promise<Result>
+     */
+    @With ({NoUserCredentialWrapFilterAsync.class})
 	public static Promise<Result> login() {
 		ServerLogger.debug("Credentials.login() - begin...");
 
@@ -45,9 +45,7 @@ public class Credentials extends Controller {
 		// BaasBoxLogger.debug ("Login called. The body is: {}", body);
 		if (body == null) {
 			ServerLogger.warn("Credentials.login() - body == null");
-			return F.Promise
-					.pure(badRequest("missing data: is the body x-www-form-urlencoded or application/json? Detected: "
-							+ request().getHeader(CONTENT_TYPE)));
+			return F.Promise.pure(badRequest("missing data: is the body x-www-form-urlencoded or application/json? Detected: " + request().getHeader(CONTENT_TYPE)));
 		}
 
 		Map<String, String[]> bodyUrlEncoded = body.asFormUrlEncoded();
@@ -75,9 +73,7 @@ public class Credentials extends Controller {
 
 			if (bodyJson == null) {
 				ServerLogger.warn("Credentials.login() - bodyJson == null ");
-				return F.Promise.pure(
-						badRequest("missing data : is the body x-www-form-urlencoded or application/json? Detected: "
-								+ request().getHeader(CONTENT_TYPE)));
+				return F.Promise.pure(badRequest("missing data : is the body x-www-form-urlencoded or application/json? Detected: "	+ request().getHeader(CONTENT_TYPE)));
 			}
 
 			if (bodyJson.get("username") == null) {
@@ -104,8 +100,7 @@ public class Credentials extends Controller {
 		// TODO remover
 		ServerLogger.debug("Credentials.login() - password " + password);
 
-		if (ServerConfiguration.getDatabaseUsername().equalsIgnoreCase(username)
-				|| ServerConfiguration.getDatabasePassword().equalsIgnoreCase(username)) {
+		if (ServerConfiguration.getDatabaseUsername().equalsIgnoreCase(username) || ServerConfiguration.getDatabasePassword().equalsIgnoreCase(username)) {
 			return F.Promise.pure(forbidden(username + " cannot login"));
 		}
 
@@ -113,7 +108,8 @@ public class Credentials extends Controller {
             String user;
             
             try (ODatabaseDocument db = DBHelper.openConnection(username,password)){
-                //user = prepareResponseToJson(UserService.getCurrentUser());
+                
+                user = prepareResponseToJson(db.getUser());
                 
                 //TODO login data é o token dos dispositivos
 //                if (loginData != null) {
@@ -150,5 +146,4 @@ public class Credentials extends Controller {
             }
         });
     }
-
 }
