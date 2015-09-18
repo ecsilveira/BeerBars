@@ -1,7 +1,5 @@
 package com.beerbars.service;
 
-import java.util.List;
-
 import com.baasbox.dao.exception.InvalidModelException;
 import com.beerbars.db.dao.GenericDao;
 import com.orientechnologies.orient.core.record.impl.ODocument;
