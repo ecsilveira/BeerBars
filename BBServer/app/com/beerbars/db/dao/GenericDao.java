@@ -3,9 +3,9 @@ package com.beerbars.db.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.baasbox.dao.exception.DocumentNotFoundException;
-import com.baasbox.dao.exception.InvalidModelException;
 import com.beerbars.db.DatabaseManager;
+import com.beerbars.exception.DocumentNotFoundException;
+import com.beerbars.exception.InvalidClassException;
 import com.beerbars.logging.ServerLogger;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
 import com.orientechnologies.orient.core.id.ORID;
@@ -41,9 +41,9 @@ public class GenericDao {
      * @return
      * @throws InvalidModelException
      */
-    public void save(ODocument documento) throws InvalidModelException {
+    public void save(ODocument documento) throws InvalidClassException {
         if (!checaClasseDocumento(documento)) {
-            throw new InvalidModelException("O Documento não pertence a classe: " + this.classe);
+            throw new InvalidClassException("O Documento não pertence a classe: " + this.classe);
         }
         db.save(documento);
     }
@@ -52,9 +52,9 @@ public class GenericDao {
      * @param documento
      * @throws InvalidModelException
      */
-    public void delete(ODocument documento) throws InvalidModelException {
+    public void delete(ODocument documento) throws InvalidClassException {
         if (!checaClasseDocumento((ODocument) documento)) {
-            throw new InvalidModelException("O documento não pertence a classe: " + this.classe);
+            throw new InvalidClassException("O documento não pertence a classe: " + this.classe);
         }
         ServerLogger.debug("GenericDao.delete - begin...");
         db.delete(documento.getIdentity());
@@ -66,7 +66,7 @@ public class GenericDao {
      * @throws DocumentNotFoundException
      * @throws InvalidModelException
      */
-    public void delete(ORID rid) throws DocumentNotFoundException, InvalidModelException {
+    public void delete(ORID rid) throws DocumentNotFoundException, InvalidClassException {
         Object doc = get(rid);
         delete((ODocument) doc);
     }
@@ -91,7 +91,7 @@ public class GenericDao {
      * @throws InvalidModelException
      * @throws DocumentNotFoundException
      */
-    public ODocument get(ORID rid) throws InvalidModelException, DocumentNotFoundException {
+    public ODocument get(ORID rid) throws InvalidClassException, DocumentNotFoundException {
         ServerLogger.debug("GenericDao.get - begin...");
         Object doc = db.load(rid);
 
@@ -103,7 +103,7 @@ public class GenericDao {
         }
 
         if (!checaClasseDocumento((ODocument) doc)) {
-            throw new InvalidModelException("O RID: " + rid + " não pertence a coleção da classe: " + this.classe);
+            throw new InvalidClassException("O RID: " + rid + " não pertence a coleção da classe: " + this.classe);
         }
 
         ServerLogger.debug("GenericDao.get - end");
@@ -127,7 +127,7 @@ public class GenericDao {
      * @throws InvalidModelException
      * @throws DocumentNotFoundException
      */
-    public boolean exists(ODocument document) throws InvalidModelException, DocumentNotFoundException {
+    public boolean exists(ODocument document) throws InvalidClassException, DocumentNotFoundException {
         return exists(document.getRecord().getIdentity());
     }
 
@@ -139,7 +139,7 @@ public class GenericDao {
      * @throws InvalidModelException
      * @throws DocumentNotFoundException
      */
-    public boolean exists(ORID rid) throws InvalidModelException, DocumentNotFoundException {
+    public boolean exists(ORID rid) throws InvalidClassException, DocumentNotFoundException {
         ODocument doc = get(rid);
         return (doc != null);
     }

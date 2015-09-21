@@ -3,7 +3,8 @@ package com.beerbars.controllers;
 import java.util.Map;
 
 import com.beerbars.ServerConfiguration;
-import com.beerbars.db.DBHelper;
+import com.beerbars.controllers.filter.NoUserCredentialWrapFilterAsync;
+import com.beerbars.db.DatabaseManager;
 import com.beerbars.logging.ServerLogger;
 import com.beerbars.security.SessionKeysEnum;
 import com.beerbars.security.SessionTokenProviderFactory;
@@ -19,6 +20,7 @@ import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Http.RequestBody;
 import play.mvc.Result;
+import play.mvc.With;
 
 /**
  * Classe Controller reponsaveis pelo acesso dos Usuarios tanto para Login, Cadastro, Login via Plugins
@@ -107,9 +109,10 @@ public class Credential extends Controller {
         return F.Promise.promise(()->{
             String user;
             
-            try (ODatabaseDocument db = DBHelper.openConnection(username,password)){
+            try (ODatabaseDocument db = DatabaseManager.openConnection(username,password)){
                 
-                user = prepareResponseToJson(db.getUser());
+                //user = prepareResponseToJson(db.getUser());
+                user = db.getUser().getDocument().toJSON();
                 
                 //TODO login data é o token dos dispositivos
 //                if (loginData != null) {

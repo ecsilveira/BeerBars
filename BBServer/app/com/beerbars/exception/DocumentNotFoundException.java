@@ -1,7 +1,7 @@
 package com.beerbars.exception;
 
 /**
- * ExceÁ„o para Documento n„o Encontrado
+ * Exce√ß√£o para Documento n√£o Encontrado
  * @author B35579
  *
  */
@@ -13,6 +13,6 @@ public class DocumentNotFoundException extends Exception{
       *  Construtor Padrao.
       */
      public DocumentNotFoundException(){
-         super("Documento n„o encontrado.");
+         super("Documento n√£o encontrado.");
      }
 }

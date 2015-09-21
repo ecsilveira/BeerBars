@@ -2,7 +2,7 @@ package com.beerbars.service;
 
 import java.util.List;
 
-import com.baasbox.dao.exception.InvalidModelException;
+import com.beerbars.exception.InvalidClassException;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
 /**
@@ -17,21 +17,21 @@ public interface IService {
      * @param documento 
      * @throws InvalidModelException 
      */
-    public void insert(ODocument documento) throws InvalidModelException;
+    public void insert(ODocument documento) throws InvalidClassException;
     
     /**
      * Metodo basico para excluisão
      * @param documento 
      * @throws InvalidModelException 
      */
-    public void delete(ODocument documento) throws InvalidModelException;
+    public void delete(ODocument documento) throws InvalidClassException;
 
     /**
      * Metodo basico para alterar
      * @param documento 
      * @throws InvalidModelException 
      */
-    public void update(ODocument documento) throws InvalidModelException;
+    public void update(ODocument documento) throws InvalidClassException;
     
     /**
      * Metodo basico para listar

@@ -15,5 +15,14 @@ public class InvalidClassException extends RuntimeException{
     public InvalidClassException(){
         super("Documento não pertence a classe especificada.");
     }
+    
+    /**
+     * Construtor com Mensagem
+     * @param message
+     */
+    public InvalidClassException(String message){
+        super(message);
+    }
+
 
 }
