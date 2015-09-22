@@ -69,7 +69,7 @@ public class DatabaseManager {
 
         try {
             ServerLogger.debug("DatabaseManager.open - abrindo conexao com banco de dados");
-
+            
             OPartitionedDatabasePoolFactory dbPoolFactory = Global.getPoolDatabaseFactory();
             db = dbPoolFactory.get(ServerConfiguration.getDatabaseURL(), username, password).acquire();
 

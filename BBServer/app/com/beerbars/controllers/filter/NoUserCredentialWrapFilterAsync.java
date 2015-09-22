@@ -9,7 +9,7 @@ import com.beerbars.controllers.response.WrapResponse;
 import com.beerbars.logging.ServerLogger;
 
 /**
- * Filter para requisições sem usuario e senha
+ * Filter para requisiÃ§Ãµes sem usuario e senha
  * @author Chico
  *
  */

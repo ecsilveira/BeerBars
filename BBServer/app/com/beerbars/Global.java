@@ -2,6 +2,7 @@ package com.beerbars;
 
 import play.Application;
 import play.GlobalSettings;
+import play.api.mvc.EssentialFilter;
 
 import com.beerbars.logging.ServerLogger;
 import com.beerbars.security.SessionTokenProviderFactory;
@@ -52,6 +53,11 @@ public class Global extends GlobalSettings {
         dbPoolFactory.close();
         ServerLogger.debug("Global.onStop() - parado!");
     }
+    
+//    public <T extends EssentialFilter> Class<T>[] filters() {
+//		return null;
+//        //return new Class[]{SecurityHeadersFilter.class};
+//    }
 
     /**
      * Retorna o Database Pool
