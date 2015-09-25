@@ -275,7 +275,7 @@ public class WrapResponse {
 		setServerTime(ctx.response());
 		ctx.response().setContentType("application/json; charset=utf-8");
 		ctx.response().setHeader("Content-Length", Long.toString(JavaResultExtractor.getBody(result).length));
-
+		
 		ServerLogger.debug("WrapResponse.wrap - end");
 		return result;
 	}// wrap
@@ -291,8 +291,7 @@ public class WrapResponse {
 	public F.Promise<SimpleResult> wrapAsync(Context ctx, F.Promise<SimpleResult> simpleResult) throws Throwable {
 		ServerLogger.debug("WrapResponse.wrapAsync - begin...");
 
-		return simpleResult.map((result) -> {
-
+		return simpleResult.map((result) -> {    
 			ctx.response().setHeader("Access-Control-Allow-Origin", "*");
 			ctx.response().setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
 			ctx.response().setHeader("Access-Control-Allow-Headers", "X-Requested-With");

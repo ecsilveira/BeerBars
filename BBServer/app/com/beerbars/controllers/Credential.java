@@ -3,6 +3,7 @@ package com.beerbars.controllers;
 import java.util.Map;
 
 import com.beerbars.ServerConfiguration;
+import com.beerbars.controllers.filter.AdminCredentialWrapFilterAsync;
 import com.beerbars.controllers.filter.NoUserCredentialWrapFilterAsync;
 import com.beerbars.db.DatabaseManager;
 import com.beerbars.logging.ServerLogger;
@@ -142,9 +143,129 @@ public class Credential extends Controller {
                 
                 user = "{username = "+ username + ",\""+ SessionKeysEnum.TOKEN.toString()+"\":\""+ (String) sessionObject.get(SessionKeysEnum.TOKEN)+"\"}";
                 JsonNode jn = mapper.readTree(user);
-                return ok(jn);
+                return ok(jn).;
             } catch (OSecurityAccessException e){
             	ServerLogger.error("Credentials.login() - erro ao efetuar login\n"+ e.getMessage());
+                return unauthorized("user " + username + " unauthorized");
+            }
+        });
+    }
+    
+    /**
+     * Metodo Responsavel pelo Cadastro do Usuario
+     * 
+     * @return F.Promise<Result>
+     */
+    @With ({AdminCredentialWrapFilterAsync.class})
+    public static Promise<Result> signUp() {
+        ServerLogger.debug("Credentials.signUp() - begin...");
+
+        final String username;
+        final String password;
+        final String loginData;
+
+        RequestBody body = request().body();
+        // BaasBoxLogger.debug ("Login called. The body is: {}", body);
+        if (body == null) {
+            ServerLogger.warn("Credentials.signUp() - body == null");
+            return F.Promise.pure(badRequest("missing data: is the body x-www-form-urlencoded or application/json? Detected: " + request().getHeader(CONTENT_TYPE)));
+        }
+
+        Map<String, String[]> bodyUrlEncoded = body.asFormUrlEncoded();
+
+        if (bodyUrlEncoded != null) {
+            if (bodyUrlEncoded.get("username") == null) {
+                return F.Promise.pure(badRequest("The 'username' field is missing"));
+            } else {
+                username = bodyUrlEncoded.get("username")[0];
+            }
+            if (bodyUrlEncoded.get("password") == null) {
+                return F.Promise.pure(badRequest("The 'password' field is missing"));
+            } else {
+                password = bodyUrlEncoded.get("password")[0];
+            }
+
+            if (bodyUrlEncoded.get("login_data") != null) {
+                loginData = bodyUrlEncoded.get("login_data")[0];
+                ServerLogger.debug("Credentials.signUp() - login_data " + loginData);
+            } else {
+                loginData = null;
+            }
+        } else {
+            JsonNode bodyJson = body.asJson();
+
+            if (bodyJson == null) {
+                ServerLogger.warn("Credentials.signUp() - bodyJson == null ");
+                return F.Promise.pure(badRequest("missing data : is the body x-www-form-urlencoded or application/json? Detected: " + request().getHeader(CONTENT_TYPE)));
+            }
+
+            if (bodyJson.get("username") == null) {
+                return F.Promise.pure(badRequest("The 'username' field is missing"));
+            } else {
+                username = bodyJson.get("username").asText();
+            }
+
+            if (bodyJson.get("password") == null) {
+                return F.Promise.pure(badRequest("The 'password' field is missing"));
+            } else {
+                password = bodyJson.get("password").asText();
+            }
+
+            if (bodyJson.get("login_data") != null) {
+                loginData = bodyJson.get("login_data").asText();
+                ServerLogger.debug("Credentials.signUp() - login_data " + loginData);
+            } else {
+                loginData = null;
+            }
+        }
+
+        ServerLogger.debug("Credentials.signUp() - ussername " + username);
+        // TODO remover
+        ServerLogger.debug("Credentials.signUp() - password " + password);
+
+        if (ServerConfiguration.getDatabaseUsername().equalsIgnoreCase(username) || ServerConfiguration.getDatabasePassword().equalsIgnoreCase(username)) {
+            return F.Promise.pure(forbidden(username + " cannot login"));
+        }
+
+        return F.Promise.promise(()->{
+            String user;
+            
+            try (ODatabaseDocument db = DatabaseManager.openConnection(username,password)){
+                
+                //user = prepareResponseToJson(db.getUser());
+                user = db.getUser().getDocument().toJSON();
+                
+                //TODO login data é o token dos dispositivos
+//                if (loginData != null) {
+//                    JsonNode loginInfo = null;
+//                    try {
+//                        loginInfo = Json.parse(loginData);
+//                    } catch (Exception e){
+//                        ServerLogger.error("Credentials.login() - erro ao logar", e);
+//                        return badRequest("login_data field is not a valid json string");
+//                    }
+//
+//                    Iterator<Entry<String, JsonNode>> it =loginInfo.fields();
+//                    HashMap<String, Object> data = new HashMap<String, Object>();
+//                    while (it.hasNext()){
+//                        Entry<String, JsonNode> element = it.next();
+//                        String key=element.getKey();
+//                        Object value=element.getValue().asText();
+//                        data.put(key,value);
+//                    }
+//                    UserService.registerDevice(data);
+//                }
+                ImmutableMap<SessionKeysEnum, ? extends Object> sessionObject = SessionTokenProviderFactory.getSessionTokenProvider().setSession(username, password);
+                response().setHeader(SessionKeysEnum.TOKEN.toString(), (String) sessionObject.get(SessionKeysEnum.TOKEN));
+
+                ObjectMapper mapper = ServerJson.mapper();
+                //user = user.substring(0,user.lastIndexOf("}")) + ",\""+ SessionKeysEnum.TOKEN.toString()+"\":\""+ (String) sessionObject.get(SessionKeysEnum.TOKEN)+"\"}";
+                
+                user = "{username = "+ username + ",\""+ SessionKeysEnum.TOKEN.toString()+"\":\""+ (String) sessionObject.get(SessionKeysEnum.TOKEN)+"\"}";
+                JsonNode jn = mapper.readTree(user);
+                return ok(jn).;
+            } catch (OSecurityAccessException e){
+                ServerLogger.error("Credentials.login() - erro ao efetuar login\n"+ e.getMessage());
                 return unauthorized("user " + username + " unauthorized");
             }
         });

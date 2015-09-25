@@ -48,7 +48,8 @@ public class DatabaseManager {
     }
 
     /**
-     * Abre uma conexao com o banco de dados Normalmente utilizado no ConnectDBWrapper
+     * Abre uma conexao com o banco de dados Normalmente utilizado no "LOGIN" do usuario 
+     * na Classe CREDENTIALS
      * 
      * @param username
      * @param password

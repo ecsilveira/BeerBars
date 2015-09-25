@@ -39,7 +39,7 @@ public class GenericDao {
      * 
      * @param documento
      * @return
-     * @throws InvalidModelException
+     * @throws InvalidClassException 
      */
     public void save(ODocument documento) throws InvalidClassException {
         if (!checaClasseDocumento(documento)) {
@@ -50,7 +50,7 @@ public class GenericDao {
 
     /**
      * @param documento
-     * @throws InvalidModelException
+     * @throws InvalidClassException 
      */
     public void delete(ODocument documento) throws InvalidClassException {
         if (!checaClasseDocumento((ODocument) documento)) {
@@ -63,8 +63,8 @@ public class GenericDao {
 
     /**
      * @param rid
+     * @throws InvalidClassException
      * @throws DocumentNotFoundException
-     * @throws InvalidModelException
      */
     public void delete(ORID rid) throws DocumentNotFoundException, InvalidClassException {
         Object doc = get(rid);
@@ -88,7 +88,7 @@ public class GenericDao {
      * 
      * @param rid
      * @return
-     * @throws InvalidModelException
+     * @throws InvalidClassException 
      * @throws DocumentNotFoundException
      */
     public ODocument get(ORID rid) throws InvalidClassException, DocumentNotFoundException {
@@ -124,7 +124,7 @@ public class GenericDao {
      * 
      * @param document
      * @return
-     * @throws InvalidModelException
+     * @throws InvalidClassException
      * @throws DocumentNotFoundException
      */
     public boolean exists(ODocument document) throws InvalidClassException, DocumentNotFoundException {
@@ -136,7 +136,7 @@ public class GenericDao {
      * 
      * @param rid
      * @return
-     * @throws InvalidModelException
+     * @throws InvalidClassException
      * @throws DocumentNotFoundException
      */
     public boolean exists(ORID rid) throws InvalidClassException, DocumentNotFoundException {
