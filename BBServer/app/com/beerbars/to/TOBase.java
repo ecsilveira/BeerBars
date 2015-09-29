@@ -27,10 +27,8 @@ public abstract class TOBase {
      *  Construtor Padrao.
      */
     public TOBase(){
-        this.fullData = mapper.createObjectNode();
-        mapper.setSerializationInclusion(Include.NON_NULL);
-        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.fullData = getMapper().createObjectNode();
+       
     }
     
     /**
@@ -52,7 +50,7 @@ public abstract class TOBase {
     }
     
     private JsonNode getMergedData(){
-        JsonNode classData = mapper.convertValue(this, JsonNode.class);
+        JsonNode classData = getMapper().convertValue(this, JsonNode.class);
         JsonNode mergedData = merge(fullData, classData);
         return mergedData;
     }
@@ -67,6 +65,9 @@ public abstract class TOBase {
      * @return o atributo mapper.
      */
     public static ObjectMapper getMapper() {
+        mapper.setSerializationInclusion(Include.NON_NULL);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper;
     }
 
