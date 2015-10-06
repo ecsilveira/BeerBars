@@ -210,8 +210,8 @@ public class WrapResponse {
 		SimpleResult result = simpleResult.get(10000);
 		ctx.response().setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
 		ctx.response().setHeader("Access-Control-Allow-Origin", "*");
-		ctx.response().setHeader("Access-Control-Allow-Headers", "X-Requested-With");
-
+		ctx.response().setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With");
+		
 		// this is an hack because scala can't access to the http context, and we need this information for the access log
 		String username = (String) ctx.args.get("username");
 		if (username != null) {

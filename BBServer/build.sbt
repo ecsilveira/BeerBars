@@ -4,6 +4,7 @@ version := "1.0.0"
 
 scalaVersion := "2.10.3"
 
+Keys.fork := true
 
 libraryDependencies ++= Seq(
   javaJdbc,

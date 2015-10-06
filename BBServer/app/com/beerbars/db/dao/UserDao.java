@@ -19,7 +19,8 @@ public class UserDao {
      *  Construtor Padrao.
      */
     public UserDao(){
-        db = DatabaseManager.getConnection();        
+    	//TODO
+        //db = DatabaseManager.open(user, senha);        
     }
     
     /**

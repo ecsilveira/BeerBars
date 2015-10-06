@@ -11,16 +11,25 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
  */
 public abstract class BaseService implements IService{
     
-    private String classe;
+    private String tabela;
     private GenericDao dao;
+    
+    /**
+     * Construtor Padrao.
+     * @param tabela 
+     */
+    public BaseService(String tabela){
+        this.tabela = tabela;
+        this.dao = new GenericDao(this.tabela);
+    }
     
     /**
      * Construtor Padrao.
      * @param classe 
      */
-    public BaseService(String classe){
-        this.classe = classe;
-        this.dao = new GenericDao(this.classe);
+    public BaseService(String classe, String dados){
+        this.tabela = classe;
+        this.dao = new GenericDao(this.tabela);
     }
     
     /**

@@ -28,7 +28,7 @@ public class HookManager {
     public static void registerAll(ODatabaseDocument db) {
         Logger.debug("HookManager.registerAll - begin...");
 
-        // checa se as hooks j� estao registradas para essa conexao
+        // checa se as hooks já estao registradas para essa conexao
         boolean bAlreadyRegistred = false;
 
         Map<ORecordHook, HOOK_POSITION> hooks = db.getHooks();

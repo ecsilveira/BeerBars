@@ -2,14 +2,13 @@ package com.beerbars.db;
 
 import com.beerbars.Global;
 import com.beerbars.ServerConfiguration;
-import com.beerbars.db.hook.HookManager;
 import com.beerbars.exception.DBFreezeException;
 import com.beerbars.logging.ServerLogger;
-import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.OPartitionedDatabasePoolFactory;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.exception.ODatabaseException;
+import com.orientechnologies.orient.core.exception.OSecurityAccessException;
 
 /**
  * 
@@ -79,11 +78,15 @@ public class DatabaseManager {
             // DatabaseManager.username.set(username);
             // DatabaseManager.password.set(password);
 
-            HookManager.registerAll(getConnection());
+            //TODO acrescentar
+            //HookManager.registerAll(getConnection());
 
             ServerLogger.debug("DatabaseManager.open - return");
+        } catch (OSecurityAccessException ose){
+        	throw ose;
         } catch (Exception e) {
             ServerLogger.error("DatabaseManager.open - erro ao abrir conexao com banco de dados\n" + e.getMessage());
+            throw e;
         }
 
         return db;
@@ -97,7 +100,7 @@ public class DatabaseManager {
         ServerLogger.debug("DatabaseManager.getConnetion - begin...");
         ODatabaseDocumentTx db = null;
         try {
-            db = (ODatabaseDocumentTx) ODatabaseRecordThreadLocal.INSTANCE.get();
+            //db = (ODatabaseDocumentTx) ODatabaseRecordThreadLocal.INSTANCE.get();
             ServerLogger.info("DatabaseManager.getConnetion - dados da Conexao do Banco = ID: " + db + " " + ((Object) db).hashCode());
         } catch (ODatabaseException e) {
             ServerLogger.error("DatabaseManager.getConnetion - nao foi possivel obter a conexao na thread local", e);

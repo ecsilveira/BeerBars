@@ -2,14 +2,13 @@ package com.beerbars.controllers.filter;
 
 import org.apache.commons.lang.StringUtils;
 
-import play.libs.F;
-import play.mvc.Http.Context;
-import play.mvc.SimpleResult;
-
-import com.baasbox.security.SessionKeys;
 import com.beerbars.controllers.response.WrapResponse;
 import com.beerbars.logging.ServerLogger;
 import com.beerbars.security.SessionKeysEnum;
+
+import play.libs.F;
+import play.mvc.Http.Context;
+import play.mvc.SimpleResult;
 
 /**
  * Filter para requisições sem usuario e senha
@@ -28,7 +27,7 @@ public class UserCredentialWrapFilterAsync extends CredentialWrapFilter {
         //seta os dados do usuario admin para abrir conexao e criar um usuario no banco de dados
         String token = contexto.request().getHeader(SessionKeysEnum.TOKEN.toString());
         if (StringUtils.isEmpty(token)){
-            token = contexto.request().getQueryString(SessionKeys.TOKEN.toString());
+            token = contexto.request().getQueryString(SessionKeysEnum.TOKEN.toString());
         }
         
         //TODO ver se se é necessario usar authorization no header?

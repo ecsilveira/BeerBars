@@ -99,7 +99,7 @@ public class Credential extends Controller {
 			}
 		}
 
-		ServerLogger.debug("Credentials.login() - ussername " + username);
+		ServerLogger.debug("Credentials.login() - username " + username);
 		// TODO remover
 		ServerLogger.debug("Credentials.login() - password " + password);
 
@@ -136,17 +136,18 @@ public class Credential extends Controller {
 //                    UserService.registerDevice(data);
 //                }
                 ImmutableMap<SessionKeysEnum, ? extends Object> sessionObject = SessionTokenProviderFactory.getSessionTokenProvider().setSession(username, password);
-                response().setHeader(SessionKeysEnum.TOKEN.toString(), (String) sessionObject.get(SessionKeysEnum.TOKEN));
+                //TODO adicionar no header depois
+                //response().setHeader(SessionKeysEnum.TOKEN.toString(), (String) sessionObject.get(SessionKeysEnum.TOKEN));
 
                 ObjectMapper mapper = ServerJson.mapper();
                 //user = user.substring(0,user.lastIndexOf("}")) + ",\""+ SessionKeysEnum.TOKEN.toString()+"\":\""+ (String) sessionObject.get(SessionKeysEnum.TOKEN)+"\"}";
                 
                 user = "{username = "+ username + ",\""+ SessionKeysEnum.TOKEN.toString()+"\":\""+ (String) sessionObject.get(SessionKeysEnum.TOKEN)+"\"}";
                 JsonNode jn = mapper.readTree(user);
-                return ok(jn).;
+                return ok(jn);
             } catch (OSecurityAccessException e){
             	ServerLogger.error("Credentials.login() - erro ao efetuar login\n"+ e.getMessage());
-                return unauthorized("user " + username + " unauthorized");
+                return unauthorized("Usuário: " + username + " não autorizado.");
             }
         });
     }
@@ -256,14 +257,15 @@ public class Credential extends Controller {
 //                    UserService.registerDevice(data);
 //                }
                 ImmutableMap<SessionKeysEnum, ? extends Object> sessionObject = SessionTokenProviderFactory.getSessionTokenProvider().setSession(username, password);
-                response().setHeader(SessionKeysEnum.TOKEN.toString(), (String) sessionObject.get(SessionKeysEnum.TOKEN));
+                //TODO
+                //response().setHeader(SessionKeysEnum.TOKEN.toString(), (String) sessionObject.get(SessionKeysEnum.TOKEN));
 
                 ObjectMapper mapper = ServerJson.mapper();
                 //user = user.substring(0,user.lastIndexOf("}")) + ",\""+ SessionKeysEnum.TOKEN.toString()+"\":\""+ (String) sessionObject.get(SessionKeysEnum.TOKEN)+"\"}";
                 
                 user = "{username = "+ username + ",\""+ SessionKeysEnum.TOKEN.toString()+"\":\""+ (String) sessionObject.get(SessionKeysEnum.TOKEN)+"\"}";
                 JsonNode jn = mapper.readTree(user);
-                return ok(jn).;
+                return ok(jn);
             } catch (OSecurityAccessException e){
                 ServerLogger.error("Credentials.login() - erro ao efetuar login\n"+ e.getMessage());
                 return unauthorized("user " + username + " unauthorized");
